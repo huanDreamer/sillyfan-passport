@@ -73,7 +73,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .authorizeRequests()
 
             // Un-secure H2 Database
-            .antMatchers("/h2-console/**/**").permitAll()
+//            .antMatchers("/h2-console/**/**").permitAll()
 
             .antMatchers("/auth/**").permitAll()
             .anyRequest().authenticated();
@@ -112,10 +112,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 "/**/*.css",
                 "/**/*.js"
             )
-
-            // Un-secure H2 Database (for testing purposes, H2 console shouldn't be unprotected in production)
-            .and()
-            .ignoring()
-            .antMatchers("/h2-console/**/**");
+        ;
+//            // Un-secure H2 Database (for testing purposes, H2 console shouldn't be unprotected in production)
+//            .and()
+//            .ignoring()
+//            .antMatchers("/h2-console/**/**");
     }
 }

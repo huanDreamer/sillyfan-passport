@@ -14,6 +14,7 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,6 +36,9 @@ public class AuthenticationRestController {
 
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
+
+//    @Autowired
+//    private PasswordEncoder passwordEncoder;
 
     @Autowired
     @Qualifier("jwtUserDetailsService")

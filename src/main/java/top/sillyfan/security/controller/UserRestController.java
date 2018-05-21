@@ -1,7 +1,5 @@
 package top.sillyfan.security.controller;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import top.sillyfan.security.JwtTokenUtil;
 import top.sillyfan.security.JwtUser;
+
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 public class UserRestController {
@@ -32,5 +32,4 @@ public class UserRestController {
         JwtUser user = (JwtUser) userDetailsService.loadUserByUsername(username);
         return user;
     }
-
 }

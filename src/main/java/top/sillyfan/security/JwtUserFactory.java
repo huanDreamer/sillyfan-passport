@@ -1,10 +1,6 @@
 package top.sillyfan.security;
 
-import top.sillyfan.model.security.Authority;
 import top.sillyfan.model.security.User;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 public final class JwtUserFactory {
 
@@ -15,17 +11,11 @@ public final class JwtUserFactory {
         return new JwtUser(
             user.getId(),
             user.getUsername(),
-            user.getFirstname(),
-            user.getLastname(),
-            user.getEmail(),
             user.getPassword(),
-            mapToGrantedAuthorities(user.getAuthorities()),
+            user.getEmail(),
+            user.getAuthorizes(),
             user.getEnabled(),
             user.getLastPasswordResetDate()
         );
-    }
-
-    private static List<String> mapToGrantedAuthorities(List<Authority> authorities) {
-        return authorities.stream().map(Authority::getName).collect(Collectors.toList());
     }
 }

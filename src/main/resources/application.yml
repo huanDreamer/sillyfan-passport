@@ -1,0 +1,22 @@
+spring:
+  jackson:
+    serialization:
+      INDENT_OUTPUT: true
+  data:
+    mongodb:
+      host: 192.168.31.181
+      port: 27017
+      database: t_user
+
+server:
+  port: 8888
+
+jwt:
+  header: Authorization
+  secret: mySecret
+  expiration: 72000
+  route:
+    authentication:
+      path: /auth
+      refresh: /refresh
+
