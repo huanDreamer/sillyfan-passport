@@ -8,7 +8,25 @@
 
 [http://localhost:8888](http://localhost:8888)
 
-## 使用 h2 数据库
+## 使用 mongodb 数据库
+
+```sql
+db.createCollectiomn('t_user');
+
+-- 初始数据 admin - admin
+db.t_user.insert({
+                     "_id" : NumberLong(1526914049264),
+                     "username" : "admin",
+                     "password" : "$2a$10$NmROVPir1O2DrBb6e70n8.B2qnE6dgOXNta6E9oih4FS/2u9JNNjG",
+                     "email" : "huan.dreamer@gmail.com",
+                     "authorizes" : [
+                         "ROLE_ADMIN"
+                     ],
+                     "enabled" : true,
+                     "lastPasswordResetDate" : ISODate("2018-05-21T14:47:29.492Z"),
+                     "_class" : "top.sillyfan.model.security.User"
+                 })
+```
 
 ## 作为独立的认证项目
 
