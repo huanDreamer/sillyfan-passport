@@ -6,7 +6,7 @@ spring:
     mongodb:
       host: 192.168.31.181
       port: 27017
-      database: t_user
+      database: auxiliary
 
 server:
   port: 8888

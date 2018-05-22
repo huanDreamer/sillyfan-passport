@@ -9,7 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.CollectionUtils;
-import top.sillyfan.model.security.AuthorityName;
+import top.sillyfan.constants.AuthorityName;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 public class JwtUser implements UserDetails {
 
     @JsonIgnore
-    private Long id;
+    private String id;
 
     private String username;
 
@@ -62,7 +62,11 @@ public class JwtUser implements UserDetails {
         if (CollectionUtils.isEmpty(authorities)) {
             return Collections.singletonList(new SimpleGrantedAuthority(AuthorityName.ROLE_USER));
         }
-        return authorities.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+        List<SimpleGrantedAuthority> auths = authorities.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+
+        auths.add(new SimpleGrantedAuthority(AuthorityName.ROLE_USER));
+
+        return auths;
     }
 
     @Override

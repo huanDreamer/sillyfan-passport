@@ -1,6 +1,6 @@
 package top.sillyfan.security;
 
-import top.sillyfan.model.security.User;
+import top.sillyfan.domain.model.User;
 
 public final class JwtUserFactory {
 
