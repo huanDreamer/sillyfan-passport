@@ -1,8 +1,5 @@
 package top.sillyfan.rest;
 
-import java.util.Collections;
-import java.util.Date;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,13 +15,15 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-import top.sillyfan.constants.AuthorityName;
-import top.sillyfan.domain.model.User;
+import top.sillyfan.auxiliaryplatform.constants.AuthorityName;
+import top.sillyfan.auxiliaryplatform.domain.model.JwtUser;
+import top.sillyfan.auxiliaryplatform.domain.model.User;
 import top.sillyfan.security.JwtAuthenticationRequest;
 import top.sillyfan.security.JwtTokenUtil;
-import top.sillyfan.security.JwtUser;
-import top.sillyfan.security.JwtUserFactory;
 import top.sillyfan.security.service.JwtUserDetailsService;
+
+import java.util.Collections;
+import java.util.Date;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
@@ -82,7 +81,16 @@ public class AuthenticationRestControllerTest {
         user.setEnabled(Boolean.TRUE);
         user.setLastPasswordResetDate(new Date(System.currentTimeMillis() + 1000 * 1000));
 
-        JwtUser jwtUser = JwtUserFactory.create(user);
+        JwtUser jwtUser = JwtUser
+            .builder()
+            .id(user.getId())
+            .username(user.getUsername())
+            .password(user.getPassword())
+            .email(user.getEmail())
+            .authorities(user.getAuthorizes())
+            .enabled(user.getEnabled())
+            .lastPasswordResetDate(user.getLastPasswordResetDate())
+            .build();
 
         when(jwtTokenUtil.getUsernameFromToken(any())).thenReturn(user.getUsername());
 

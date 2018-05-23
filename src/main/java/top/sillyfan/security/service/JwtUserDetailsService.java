@@ -6,9 +6,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import top.sillyfan.domain.model.User;
-import top.sillyfan.security.JwtUserFactory;
-import top.sillyfan.domain.repository.UserRepository;
+import top.sillyfan.auxiliaryplatform.domain.model.JwtUser;
+import top.sillyfan.auxiliaryplatform.domain.model.User;
+import top.sillyfan.auxiliaryplatform.domain.repository.UserRepository;
 
 @Service
 public class JwtUserDetailsService implements UserDetailsService {
@@ -26,7 +26,16 @@ public class JwtUserDetailsService implements UserDetailsService {
         if (user == null) {
             throw new UsernameNotFoundException(String.format("No user found with username '%s'.", username));
         } else {
-            return JwtUserFactory.create(user);
+            return JwtUser
+                .builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .password(user.getPassword())
+                .email(user.getEmail())
+                .authorities(user.getAuthorizes())
+                .enabled(user.getEnabled())
+                .lastPasswordResetDate(user.getLastPasswordResetDate())
+                .build();
         }
     }
 }

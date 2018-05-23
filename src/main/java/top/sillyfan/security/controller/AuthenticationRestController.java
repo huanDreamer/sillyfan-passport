@@ -14,7 +14,6 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import top.sillyfan.security.JwtAuthenticationRequest;
 import top.sillyfan.security.JwtTokenUtil;
-import top.sillyfan.security.JwtUser;
+import top.sillyfan.auxiliaryplatform.domain.model.JwtUser;
 import top.sillyfan.security.service.JwtAuthenticationResponse;
 
 @RestController

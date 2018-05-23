@@ -8,6 +8,7 @@ import io.jsonwebtoken.impl.DefaultClock;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import top.sillyfan.auxiliaryplatform.domain.model.JwtUser;
 
 import java.io.Serializable;
 import java.util.Date;

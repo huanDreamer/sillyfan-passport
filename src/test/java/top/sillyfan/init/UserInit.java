@@ -6,12 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
-import top.sillyfan.constants.AuthorityName;
-import top.sillyfan.constants.UserDef;
-import top.sillyfan.domain.model.User;
-import top.sillyfan.domain.repository.UserRepository;
+import top.sillyfan.auxiliaryplatform.constants.UserDef;
+import top.sillyfan.auxiliaryplatform.domain.model.User;
+import top.sillyfan.auxiliaryplatform.domain.repository.UserRepository;
 
-import java.util.Collections;
 import java.util.Date;
 import java.util.UUID;
 
