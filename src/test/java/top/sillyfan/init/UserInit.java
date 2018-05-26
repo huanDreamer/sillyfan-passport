@@ -30,7 +30,7 @@ public class UserInit {
         u.setEmail("huan.dreamer@gmail.com");
         u.setType(UserDef.UserTypeEnum.Admin.getCode());
         u.setAuthorizes(UserDef.UserTypeEnum.Admin.getAuths());
-        u.setEnabled(true);
+        u.setStatus(UserDef.UserStatusEnum.Enabled.getCode());
         u.setPassword(new BCryptPasswordEncoder().encode("admin"));
         u.setLastPasswordResetDate(new Date());
 

@@ -12,6 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import top.sillyfan.auxiliaryplatform.constants.AuthorityName;
+import top.sillyfan.auxiliaryplatform.constants.UserDef;
 import top.sillyfan.auxiliaryplatform.domain.model.JwtUser;
 import top.sillyfan.auxiliaryplatform.domain.model.User;
 import top.sillyfan.security.JwtTokenUtil;
@@ -64,7 +65,7 @@ public class UserRestControllerTest {
         User user = new User();
         user.setUsername("username");
         user.setAuthorizes(Collections.singletonList(AuthorityName.ROLE_USER));
-        user.setEnabled(Boolean.TRUE);
+        user.setStatus(UserDef.UserStatusEnum.Enabled.getCode());
         user.setLastPasswordResetDate(new Date(System.currentTimeMillis() + 1000 * 1000));
 
         JwtUser jwtUser = JwtUser
@@ -74,7 +75,7 @@ public class UserRestControllerTest {
             .password(user.getPassword())
             .email(user.getEmail())
             .authorities(user.getAuthorizes())
-            .enabled(user.getEnabled())
+            .enabled(UserDef.UserStatusEnum.Enabled.match(user.getStatus()))
             .lastPasswordResetDate(user.getLastPasswordResetDate())
             .build();
 
