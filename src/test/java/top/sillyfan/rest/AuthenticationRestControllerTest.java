@@ -89,7 +89,7 @@ public class AuthenticationRestControllerTest {
             .password(user.getPassword())
             .email(user.getEmail())
             .authorities(user.getAuthorizes())
-            .enabled(UserDef.UserStatusEnum.Enabled.match(user.getStatus()))
+            .status(user.getStatus())
             .lastPasswordResetDate(user.getLastPasswordResetDate())
             .build();
 

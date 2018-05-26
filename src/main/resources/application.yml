@@ -4,7 +4,7 @@ spring:
       INDENT_OUTPUT: true
   data:
     mongodb:
-      host: 192.168.31.181
+      host: mongo.host
       port: 27017
       database: auxiliary
 
