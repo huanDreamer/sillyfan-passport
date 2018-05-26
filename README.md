@@ -11,7 +11,7 @@
 ## 使用 mongodb 数据库
 
 ```sql
-db.createCollectiomn('t_user');
+db.createCollection('t_user');
 
 -- 初始数据 admin - admin
 db.t_user.insert({
@@ -22,7 +22,8 @@ db.t_user.insert({
                      "authorizes" : [
                          "ROLE_ADMIN"
                      ],
-                     "enabled" : true,
+                     "status": 1,
+                     "type": 1,
                      "lastPasswordResetDate" : ISODate("2018-05-21T14:47:29.492Z"),
                      "_class" : "top.sillyfan.model.security.User"
                  })
