@@ -26,12 +26,12 @@ public class UserInit {
         User u = new User();
 
         u.setId(UUID.randomUUID().toString());
-        u.setUsername("admin");
+        u.setUsername("huan");
         u.setEmail("huan.dreamer@gmail.com");
         u.setType(UserDef.UserTypeEnum.Admin.getCode());
         u.setAuthorizes(UserDef.UserTypeEnum.Admin.getAuths());
         u.setStatus(UserDef.UserStatusEnum.Enabled.getCode());
-        u.setPassword(new BCryptPasswordEncoder().encode("admin"));
+        u.setPassword(new BCryptPasswordEncoder().encode("huan"));
         u.setLastPasswordResetDate(new Date());
 
         userRepository.insert(u);
