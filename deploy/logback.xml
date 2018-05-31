@@ -1,0 +1,80 @@
+<!DOCTYPE logback>
+<configuration>
+
+	<!-- AMPQ配置信息 -->
+	<!-- <property resource="config/rabbitmq.properties" /> -->
+	
+	<include resource="org/springframework/boot/logging/logback/defaults.xml" />
+	<include resource="org/springframework/boot/logging/logback/console-appender.xml" />
+	
+     <property name="LOG_FILE" value="logs/passport/passport.log"/>
+	
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+        </encoder>
+        <file>${LOG_FILE}</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_FILE}.%d{yyyyMMdd}</fileNamePattern>
+            <maxHistory>15</maxHistory>
+        </rollingPolicy>
+    </appender>
+    
+    <appender name="ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+        </encoder>
+        <file>${LOG_FILE}.error</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_FILE}.%d{yyyyMMdd}.error</fileNamePattern>
+            <maxHistory>15</maxHistory>
+        </rollingPolicy>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+        	<level>ERROR</level>
+        	<onMatch>ACCEPT</onMatch>
+        	<onMismatch>DENY</onMismatch>   
+        </filter>
+    </appender>
+    	
+    <!-- 3rdparty Loggers -->
+    <logger name="org.springframework">
+        <level value="warn" />
+    </logger>
+
+    <logger name="org.springframework.web.servlet">
+        <level value="info" />
+    </logger>
+
+	<logger name="org.springframework.beans.factory.support.DefaultListableBeanFactory">
+        <level value="error" />
+    </logger> 
+    
+    <logger name="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <level value="info" />
+    </logger>
+
+    <logger name="org.springframework.http.client">
+    	<level value="debug"/>
+    </logger>
+    
+    <logger name="org.springframework.web.client">
+    	<level value="debug"/>
+    </logger>
+    
+    <!-- 项目的日志级别定义 -->
+    <logger name="top.sillyfan">
+    	<level value="debug" />
+    </logger>
+
+	<root level="INFO">
+		<appender-ref ref="FILE" />
+		<appender-ref ref="ERROR" />
+	</root>
+
+	<root level="INFO">
+		<appender-ref ref="CONSOLE" />
+	</root>
+
+</configuration>

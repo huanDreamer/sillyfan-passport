@@ -1,0 +1,44 @@
+<!DOCTYPE logback>
+<configuration>
+
+	<!-- AMPQ配置信息 -->
+	<!-- <property resource="config/rabbitmq.properties" /> -->
+	
+	<include resource="org/springframework/boot/logging/logback/defaults.xml" />
+	<include resource="org/springframework/boot/logging/logback/console-appender.xml" />
+    	
+    <!-- 3rdparty Loggers -->
+    <logger name="org.springframework">
+        <level value="warn" />
+    </logger>
+
+    <logger name="org.springframework.web.servlet">
+        <level value="info" />
+    </logger>
+
+	<logger name="org.springframework.beans.factory.support.DefaultListableBeanFactory">
+        <level value="error" />
+    </logger> 
+    
+    <logger name="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <level value="info" />
+    </logger>
+
+    <logger name="org.springframework.http.client">
+    	<level value="debug"/>
+    </logger>
+    
+    <logger name="org.springframework.web.client">
+    	<level value="debug"/>
+    </logger>
+    
+    <!-- 项目的日志级别定义 -->
+    <logger name="top.sillyfan">
+    	<level value="debug" />
+    </logger>
+
+	<root level="INFO">
+		<appender-ref ref="CONSOLE" />
+	</root>
+
+</configuration>
