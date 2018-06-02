@@ -33,6 +33,8 @@ public class JwtUserDetailsService implements UserDetailsService {
                 .username(user.getUsername())
                 .password(user.getPassword())
                 .email(user.getEmail())
+                .qq(user.getQq())
+                .phone(user.getPhone())
                 .type(user.getType())
                 .superUser(user.getSuperUser())
                 .authorities(user.getAuthorizes())

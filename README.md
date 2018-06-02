@@ -11,7 +11,7 @@
 ## 使用 mongodb 数据库
 
 ```sql
-db.createCollection('t_user');
+db.createCollection('user');
 
 -- 初始数据 admin - admin
 db.t_user.insert({
