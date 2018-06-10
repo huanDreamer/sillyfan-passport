@@ -6,7 +6,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import top.sillyfan.auxiliaryplatform.constants.UserDef;
 import top.sillyfan.auxiliaryplatform.domain.model.JwtUser;
 import top.sillyfan.auxiliaryplatform.domain.model.User;
 import top.sillyfan.auxiliaryplatform.domain.repository.UserRepository;
@@ -35,6 +34,7 @@ public class JwtUserDetailsService implements UserDetailsService {
                 .email(user.getEmail())
                 .qq(user.getQq())
                 .phone(user.getPhone())
+                .mark(user.getMark())
                 .type(user.getType())
                 .superUser(user.getSuperUser())
                 .authorities(user.getAuthorizes())
