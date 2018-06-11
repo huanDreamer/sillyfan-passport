@@ -39,6 +39,7 @@ public class JwtUserDetailsService implements UserDetailsService {
                 .superUser(user.getSuperUser())
                 .authorities(user.getAuthorizes())
                 .status(user.getStatus())
+                .acceptTaskStatus(user.getAcceptTaskStatus())
                 .online(user.getOnline())
                 .lastPasswordResetDate(user.getLastPasswordResetDate())
                 .build();
