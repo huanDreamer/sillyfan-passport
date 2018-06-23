@@ -7,6 +7,11 @@ spring:
       host: 192.168.31.181
       port: 27017
       database: auxiliary
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://111.231.146.172:3306/auxiliary?useUnicode=true&amp;characterEncoding=UTF-8&useSSL=false
+    username: root
+    password: djuey2eh8u
 
 server:
   port: 8888
@@ -14,9 +19,11 @@ server:
 jwt:
   header: Authorization
   secret: mySecret
-  expiration: 72000
+  expiration: 300
   route:
     authentication:
       path: /auth
       refresh: /refresh
 
+mybatis:
+  mapper-locations: classpath*:config/mybatis/**/*Mapper.xml

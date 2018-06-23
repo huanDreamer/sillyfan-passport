@@ -1,6 +1,7 @@
 package top.sillyfan.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,12 +20,10 @@ import top.sillyfan.auxiliaryplatform.constants.AuthorityName;
 import top.sillyfan.auxiliaryplatform.constants.UserDef;
 import top.sillyfan.auxiliaryplatform.domain.model.JwtUser;
 import top.sillyfan.auxiliaryplatform.domain.model.User;
+import top.sillyfan.auxiliaryplatform.domain.model.json.StringList;
 import top.sillyfan.security.JwtAuthenticationRequest;
 import top.sillyfan.security.JwtTokenUtil;
 import top.sillyfan.security.service.JwtUserDetailsService;
-
-import java.util.Collections;
-import java.util.Date;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
@@ -78,9 +77,9 @@ public class AuthenticationRestControllerTest {
 
         User user = new User();
         user.setUsername("username");
-        user.setAuthorizes(Collections.singletonList(AuthorityName.ROLE_ADMIN));
+        user.setAuthorizes(StringList.of(AuthorityName.ROLE_ADMIN));
         user.setStatus(UserDef.UserStatusEnum.Enabled.getCode());
-        user.setLastPasswordResetDate(new Date(System.currentTimeMillis() + 1000 * 1000));
+        user.setLastpasswordresetdate(new DateTime(System.currentTimeMillis() + 1000 * 1000));
 
         JwtUser jwtUser = JwtUser
             .builder()
@@ -90,7 +89,7 @@ public class AuthenticationRestControllerTest {
             .email(user.getEmail())
             .authorities(user.getAuthorizes())
             .status(user.getStatus())
-            .lastPasswordResetDate(user.getLastPasswordResetDate())
+            .lastPasswordResetDate(user.getLastpasswordresetdate())
             .build();
 
         when(jwtTokenUtil.getUsernameFromToken(any())).thenReturn(user.getUsername());

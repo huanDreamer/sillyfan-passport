@@ -5,6 +5,7 @@ import io.jsonwebtoken.Clock;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.impl.DefaultClock;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -59,8 +60,8 @@ public class JwtTokenUtil implements Serializable {
         return expiration.before(clock.now());
     }
 
-    private Boolean isCreatedBeforeLastPasswordReset(Date created, Date lastPasswordReset) {
-        return (lastPasswordReset != null && created.before(lastPasswordReset));
+    private Boolean isCreatedBeforeLastPasswordReset(DateTime created, DateTime lastPasswordReset) {
+        return (lastPasswordReset != null && created.isBefore(lastPasswordReset));
     }
 
     private Boolean ignoreTokenExpiration(String token) {
@@ -86,8 +87,8 @@ public class JwtTokenUtil implements Serializable {
             .compact();
     }
 
-    public Boolean canTokenBeRefreshed(String token, Date lastPasswordReset) {
-        final Date created = getIssuedAtDateFromToken(token);
+    public Boolean canTokenBeRefreshed(String token, DateTime lastPasswordReset) {
+        final DateTime created = new DateTime(getIssuedAtDateFromToken(token).getTime());
         return !isCreatedBeforeLastPasswordReset(created, lastPasswordReset)
             && (!isTokenExpired(token) || ignoreTokenExpiration(token));
     }
@@ -109,7 +110,7 @@ public class JwtTokenUtil implements Serializable {
     public Boolean validateToken(String token, UserDetails userDetails) {
         JwtUser user = (JwtUser) userDetails;
         final String username = getUsernameFromToken(token);
-        final Date created = getIssuedAtDateFromToken(token);
+        final DateTime created = new DateTime(getIssuedAtDateFromToken(token).getTime());
         //final Date expiration = getExpirationDateFromToken(token);
         return (
             username.equals(user.getUsername())

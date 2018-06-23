@@ -1,10 +1,9 @@
 package top.sillyfan.security;
 
-import java.util.Date;
-
 import io.jsonwebtoken.Clock;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.assertj.core.util.DateUtil;
+import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -13,6 +12,8 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.util.ReflectionTestUtils;
 import top.sillyfan.auxiliaryplatform.domain.model.JwtUser;
+
+import java.util.Date;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.within;
@@ -83,7 +84,7 @@ public class JwtTokenUtilTest {
         when(clockMock.now())
             .thenReturn(DateUtil.yesterday());
         String token = createToken();
-        jwtTokenUtil.canTokenBeRefreshed(token, DateUtil.tomorrow());
+        jwtTokenUtil.canTokenBeRefreshed(token, DateTime.now().plusDays(1));
     }
 
     @Test
@@ -91,7 +92,7 @@ public class JwtTokenUtilTest {
         when(clockMock.now())
             .thenReturn(DateUtil.now());
         String token = createToken();
-        assertThat(jwtTokenUtil.canTokenBeRefreshed(token, DateUtil.tomorrow())).isFalse();
+        assertThat(jwtTokenUtil.canTokenBeRefreshed(token, DateTime.now().plusDays(1))).isFalse();
     }
 
     @Test
@@ -99,7 +100,7 @@ public class JwtTokenUtilTest {
         when(clockMock.now())
             .thenReturn(DateUtil.now());
         String token = createToken();
-        assertThat(jwtTokenUtil.canTokenBeRefreshed(token, DateUtil.yesterday())).isTrue();
+        assertThat(jwtTokenUtil.canTokenBeRefreshed(token, DateTime.now().minusDays(1))).isTrue();
     }
 
     @Test

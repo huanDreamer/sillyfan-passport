@@ -8,7 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import top.sillyfan.auxiliaryplatform.domain.model.JwtUser;
 import top.sillyfan.auxiliaryplatform.domain.model.User;
-import top.sillyfan.auxiliaryplatform.domain.repository.UserRepository;
+import top.sillyfan.auxiliaryplatform.service.UserService;
 
 @Service
 public class JwtUserDetailsService implements UserDetailsService {
@@ -17,11 +17,11 @@ public class JwtUserDetailsService implements UserDetailsService {
     PasswordEncoder passwordEncoder;
 
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username);
+        User user = userService.findByUserName(username);
 
         if (user == null) {
             throw new UsernameNotFoundException(String.format("No user found with username '%s'.", username));
@@ -36,12 +36,12 @@ public class JwtUserDetailsService implements UserDetailsService {
                 .phone(user.getPhone())
                 .mark(user.getMark())
                 .type(user.getType())
-                .superUser(user.getSuperUser())
+                .superUser(user.getSuperuser())
                 .authorities(user.getAuthorizes())
                 .status(user.getStatus())
-                .acceptTaskStatus(user.getAcceptTaskStatus())
+                .taskStatus(user.getTaskstatus())
                 .online(user.getOnline())
-                .lastPasswordResetDate(user.getLastPasswordResetDate())
+                .lastPasswordResetDate(user.getLastpasswordresetdate())
                 .build();
         }
     }
