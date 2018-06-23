@@ -32,8 +32,8 @@ public class UserInit {
         u.setAuthorizes(StringList.of(UserDef.UserTypeEnum.Admin.getAuths()));
         u.setStatus(UserDef.UserStatusEnum.Enabled.getCode());
         u.setPassword(new BCryptPasswordEncoder().encode("123"));
-        u.setTaskstatus(UserDef.UserStatusEnum.Enabled.getCode());
-        u.setLastpasswordresetdate(DateTime.now());
+        u.setTaskStatus(UserDef.UserStatusEnum.Enabled.getCode());
+        u.setLastPasswordResetDate(DateTime.now());
 
         userService.create(u);
     }

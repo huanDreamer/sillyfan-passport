@@ -20,6 +20,7 @@ jwt:
   header: Authorization
   secret: mySecret
   expiration: 300
+  long-expiration: 3600
   route:
     authentication:
       path: /auth

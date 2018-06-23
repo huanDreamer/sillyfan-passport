@@ -82,7 +82,7 @@ public class AuthenticationRestController {
 
             tokenUtil.deleteToken(accessToken.getToken());
 
-            String newToken = tokenUtil.generateToken(accessToken.getUsername(), accessToken.getUserid(), accessToken.getType());
+            String newToken = tokenUtil.generateToken(accessToken.getUsername(), accessToken.getUserId(), accessToken.getType());
             return ResponseEntity.ok(new JwtAuthenticationResponse(newToken));
 
         } else {

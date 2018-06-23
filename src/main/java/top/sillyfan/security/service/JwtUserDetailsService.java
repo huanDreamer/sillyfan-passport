@@ -37,13 +37,13 @@ public class JwtUserDetailsService implements UserDetailsService {
                 .phone(user.getPhone())
                 .mark(user.getMark())
                 .type(user.getType())
-                .maxtokennum(user.getMaxtokennum())
-                .superUser(user.getSuperuser())
+                .maxtokennum(user.getMaxTokenNum())
+                .superUser(user.getSuperUser())
                 .authorities(user.getAuthorizes())
                 .status(user.getStatus())
-                .taskStatus(user.getTaskstatus())
+                .taskStatus(user.getTaskStatus())
                 .online(user.getOnline())
-                .lastPasswordResetDate(user.getLastpasswordresetdate())
+                .lastPasswordResetDate(user.getLastPasswordResetDate())
                 .build();
         }
     }

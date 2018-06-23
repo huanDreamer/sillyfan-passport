@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Objects;
+import java.util.Optional;
 
 public class AuthorizationTokenFilter extends OncePerRequestFilter {
 
@@ -38,13 +39,15 @@ public class AuthorizationTokenFilter extends OncePerRequestFilter {
 
         final String requestHeader = request.getHeader(this.tokenHeader);
 
+        Integer type = Integer.valueOf(Optional.ofNullable(request.getParameter("type")).orElse("2"));
+
         String username = null;
         String authToken = null;
         AccessToken accessToken = null;
         if (requestHeader != null && requestHeader.startsWith("Bearer ")) {
             authToken = requestHeader.substring(7);
             try {
-                accessToken = tokenUtil.getUsernameFromToken(authToken);
+                accessToken = tokenUtil.getUsernameFromToken(authToken, type);
 
                 // 找到token，并且未到期
                 if (Objects.nonNull(accessToken) && !tokenUtil.tokenExpire(accessToken)) {

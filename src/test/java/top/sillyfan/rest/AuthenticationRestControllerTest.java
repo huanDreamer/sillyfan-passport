@@ -79,7 +79,7 @@ public class AuthenticationRestControllerTest {
         user.setUsername("username");
         user.setAuthorizes(StringList.of(AuthorityName.ROLE_ADMIN));
         user.setStatus(UserDef.UserStatusEnum.Enabled.getCode());
-        user.setLastpasswordresetdate(new DateTime(System.currentTimeMillis() + 1000 * 1000));
+        user.setLastPasswordResetDate(new DateTime(System.currentTimeMillis() + 1000 * 1000));
 
         JwtUser jwtUser = JwtUser
             .builder()
@@ -89,7 +89,7 @@ public class AuthenticationRestControllerTest {
             .email(user.getEmail())
             .authorities(user.getAuthorizes())
             .status(user.getStatus())
-            .lastPasswordResetDate(user.getLastpasswordresetdate())
+            .lastPasswordResetDate(user.getLastPasswordResetDate())
             .build();
 
         when(jwtTokenUtil.getUsernameFromToken(any())).thenReturn(user.getUsername());
