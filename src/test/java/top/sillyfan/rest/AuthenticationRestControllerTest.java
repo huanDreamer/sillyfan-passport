@@ -21,7 +21,7 @@ import top.sillyfan.auxiliaryplatform.constants.UserDef;
 import top.sillyfan.auxiliaryplatform.domain.model.JwtUser;
 import top.sillyfan.auxiliaryplatform.domain.model.User;
 import top.sillyfan.auxiliaryplatform.domain.model.json.StringList;
-import top.sillyfan.security.JwtAuthenticationRequest;
+import top.sillyfan.security.AuthenticationRequest;
 import top.sillyfan.security.JwtTokenUtil;
 import top.sillyfan.security.service.JwtUserDetailsService;
 
@@ -63,7 +63,7 @@ public class AuthenticationRestControllerTest {
     @WithAnonymousUser
     public void successfulAuthenticationWithAnonymousUser() throws Exception {
 
-        JwtAuthenticationRequest jwtAuthenticationRequest = new JwtAuthenticationRequest("user", "password");
+        AuthenticationRequest jwtAuthenticationRequest = new AuthenticationRequest("user", "password", 2);
 
         mvc.perform(post("/auth")
             .contentType(MediaType.APPLICATION_JSON)

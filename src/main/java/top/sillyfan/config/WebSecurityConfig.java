@@ -16,9 +16,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import top.sillyfan.security.JwtAuthenticationEntryPoint;
-import top.sillyfan.security.JwtAuthorizationTokenFilter;
-import top.sillyfan.security.JwtTokenUtil;
+import top.sillyfan.security.AuthorizationTokenFilter;
+import top.sillyfan.security.MyAuthenticationEntryPoint;
+import top.sillyfan.security.TokenUtil;
 import top.sillyfan.security.service.JwtUserDetailsService;
 
 @Configuration
@@ -27,10 +27,10 @@ import top.sillyfan.security.service.JwtUserDetailsService;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private JwtAuthenticationEntryPoint unauthorizedHandler;
+    private MyAuthenticationEntryPoint unauthorizedHandler;
 
     @Autowired
-    private JwtTokenUtil jwtTokenUtil;
+    private TokenUtil tokenUtil;
 
     @Autowired
     private JwtUserDetailsService jwtUserDetailsService;
@@ -40,6 +40,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Value("${jwt.route.authentication.path}")
     private String authenticationPath;
+
+    @Value("${jwt.route.authentication.refresh}")
+    private String refreshUrl;
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
@@ -76,10 +79,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //            .antMatchers("/h2-console/**/**").permitAll()
 
             .antMatchers("/auth/**").permitAll()
+            .antMatchers(refreshUrl).permitAll()
             .anyRequest().authenticated();
 
         // Custom JWT based security filter
-        JwtAuthorizationTokenFilter authenticationTokenFilter = new JwtAuthorizationTokenFilter(userDetailsService(), jwtTokenUtil, tokenHeader);
+        AuthorizationTokenFilter authenticationTokenFilter = new AuthorizationTokenFilter(userDetailsService(), tokenUtil, tokenHeader);
         httpSecurity
             .addFilterBefore(authenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
 

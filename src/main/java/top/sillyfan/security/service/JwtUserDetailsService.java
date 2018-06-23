@@ -8,6 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import top.sillyfan.auxiliaryplatform.domain.model.JwtUser;
 import top.sillyfan.auxiliaryplatform.domain.model.User;
+import top.sillyfan.auxiliaryplatform.service.AccessTokenService;
 import top.sillyfan.auxiliaryplatform.service.UserService;
 
 @Service
@@ -36,6 +37,7 @@ public class JwtUserDetailsService implements UserDetailsService {
                 .phone(user.getPhone())
                 .mark(user.getMark())
                 .type(user.getType())
+                .maxtokennum(user.getMaxtokennum())
                 .superUser(user.getSuperuser())
                 .authorities(user.getAuthorizes())
                 .status(user.getStatus())

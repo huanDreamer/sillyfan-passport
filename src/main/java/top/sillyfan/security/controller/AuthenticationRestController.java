@@ -1,8 +1,6 @@
 package top.sillyfan.security.controller;
 
-import java.util.Objects;
-import javax.servlet.http.HttpServletRequest;
-
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,45 +10,59 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-import top.sillyfan.security.JwtAuthenticationRequest;
-import top.sillyfan.security.JwtTokenUtil;
+import org.springframework.web.bind.annotation.*;
+import top.sillyfan.auxiliaryplatform.domain.model.AccessToken;
 import top.sillyfan.auxiliaryplatform.domain.model.JwtUser;
+import top.sillyfan.auxiliaryplatform.service.AccessTokenService;
+import top.sillyfan.security.AuthenticationRequest;
+import top.sillyfan.security.TokenUtil;
 import top.sillyfan.security.service.JwtAuthenticationResponse;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Objects;
 
 @RestController
 public class AuthenticationRestController {
 
+    @Autowired
+    AccessTokenService accessTokenService;
     @Value("${jwt.header}")
     private String tokenHeader;
-
     @Autowired
     private AuthenticationManager authenticationManager;
-
     @Autowired
-    private JwtTokenUtil jwtTokenUtil;
+    private TokenUtil tokenUtil;
 
-//    @Autowired
+    //    @Autowired
 //    private PasswordEncoder passwordEncoder;
-
     @Autowired
     @Qualifier("jwtUserDetailsService")
     private UserDetailsService userDetailsService;
 
     @RequestMapping(value = "${jwt.route.authentication.path}", method = RequestMethod.POST)
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest) throws AuthenticationException {
+    public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws AuthenticationException {
 
         authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
 
+        if (Objects.isNull(authenticationRequest.getType())) {
+            authenticationRequest.setType(2);
+        }
+
         // Reload password post-security so we can generate the token
-        final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
-        final String token = jwtTokenUtil.generateToken(userDetails);
+        final JwtUser jwtUser = (JwtUser) userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
+
+        // 如果是需求方，并且限制了最大token数量。并且是脚本登陆
+        if (jwtUser.isDemander() && jwtUser.getMaxtokennum() != 0 && authenticationRequest.getType() == 2) {
+
+            int count = accessTokenService.countByUserIdAndType(jwtUser.getId(), authenticationRequest.getType());
+
+            if (count >= jwtUser.getMaxtokennum()) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("脚本数量已达到最大限制");
+            }
+        }
+
+        final String token = tokenUtil.generateToken(jwtUser.getUsername(), jwtUser.getId(), authenticationRequest.getType());
 
         // Return the token
         return ResponseEntity.ok(new JwtAuthenticationResponse(token));
@@ -59,15 +71,22 @@ public class AuthenticationRestController {
     @RequestMapping(value = "${jwt.route.authentication.refresh}", method = RequestMethod.GET)
     public ResponseEntity<?> refreshAndGetAuthenticationToken(HttpServletRequest request) {
         String authToken = request.getHeader(tokenHeader);
+        if (StringUtils.isBlank(authToken)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("请求参数缺少token");
+        }
         final String token = authToken.substring(7);
-        String username = jwtTokenUtil.getUsernameFromToken(token);
-        JwtUser user = (JwtUser) userDetailsService.loadUserByUsername(username);
+        AccessToken accessToken = accessTokenService.findOne(token);
 
-        if (jwtTokenUtil.canTokenBeRefreshed(token, user.getLastPasswordResetDate())) {
-            String refreshedToken = jwtTokenUtil.refreshToken(token);
-            return ResponseEntity.ok(new JwtAuthenticationResponse(refreshedToken));
+        // token找到，则删除原来的token，并且生成新的token
+        if (Objects.nonNull(accessToken)) {
+
+            tokenUtil.deleteToken(accessToken.getToken());
+
+            String newToken = tokenUtil.generateToken(accessToken.getUsername(), accessToken.getUserid(), accessToken.getType());
+            return ResponseEntity.ok(new JwtAuthenticationResponse(newToken));
+
         } else {
-            return ResponseEntity.badRequest().body(null);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("token未找到");
         }
     }
 

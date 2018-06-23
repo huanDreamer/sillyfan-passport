@@ -6,10 +6,12 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.impl.DefaultClock;
 import org.joda.time.DateTime;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import top.sillyfan.auxiliaryplatform.domain.model.JwtUser;
+import top.sillyfan.auxiliaryplatform.service.AccessTokenService;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -30,6 +32,9 @@ public class JwtTokenUtil implements Serializable {
 
     @Value("${jwt.expiration}")
     private Long expiration;
+
+    @Autowired
+    AccessTokenService accessTokenService;
 
     public String getUsernameFromToken(String token) {
         return getClaimFromToken(token, Claims::getSubject);
