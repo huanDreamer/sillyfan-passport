@@ -14,9 +14,12 @@ server:
 jwt:
   header: Authorization
   secret: mySecret
-  expiration: 72000
+  expiration: 300
+  long-expiration: 3600
   route:
     authentication:
       path: /auth
       refresh: /refresh
 
+mybatis:
+  mapper-locations: classpath*:config/mybatis/**/*Mapper.xml
