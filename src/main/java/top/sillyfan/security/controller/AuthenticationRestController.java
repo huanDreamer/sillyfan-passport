@@ -103,21 +103,24 @@ public class AuthenticationRestController {
 
             tokenUtil.deleteToken(accessToken.getToken());
 
-            String newToken = tokenUtil.generateToken(accessToken.getUsername(), accessToken.getUserId(), accessToken.getType());
-
             if (accessToken.getType() == 2) {
                 int count = accessTokenService.countByUserIdAndType(accessToken.getUserId(), accessToken.getType());
                 final JwtUser jwtUser = (JwtUser) userDetailsService.loadUserByUsername(accessToken.getUsername());
 
                 // 剩余数量
-                if(jwtUser.getMaxtokennum() == 0) {
+                if (jwtUser.getMaxtokennum() == 0) {
                     leftNum = 999;
                 } else {
                     leftNum = jwtUser.getMaxtokennum() - count - 1;
                 }
+                if (leftNum < 0) {
+                    return ResponseEntity.status(HttpStatus.FORBIDDEN).body("脚本数量已达到最大限制");
+                }
                 expire = expiration;
             }
 
+            String newToken = tokenUtil.generateToken(accessToken.getUsername(), accessToken.getUserId(), accessToken.getType());
+            
             return ResponseEntity.ok(new JwtAuthenticationResponse(newToken, leftNum, expire));
 
         } else {
