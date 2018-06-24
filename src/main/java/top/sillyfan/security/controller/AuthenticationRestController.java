@@ -120,7 +120,7 @@ public class AuthenticationRestController {
             }
 
             String newToken = tokenUtil.generateToken(accessToken.getUsername(), accessToken.getUserId(), accessToken.getType());
-            
+
             return ResponseEntity.ok(new JwtAuthenticationResponse(newToken, leftNum, expire));
 
         } else {
