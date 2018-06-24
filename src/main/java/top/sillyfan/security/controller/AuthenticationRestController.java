@@ -34,6 +34,9 @@ public class AuthenticationRestController {
     @Autowired
     private TokenUtil tokenUtil;
 
+    @Value("${jwt.expiration}")
+    private Integer expiration;
+
     //    @Autowired
 //    private PasswordEncoder passwordEncoder;
     @Autowired
@@ -49,23 +52,38 @@ public class AuthenticationRestController {
             authenticationRequest.setType(2);
         }
 
+        Integer leftNum = null;
+        Integer expire = null;
+
         // Reload password post-security so we can generate the token
         final JwtUser jwtUser = (JwtUser) userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
 
         // 如果是需求方，并且限制了最大token数量。并且是脚本登陆
-        if (jwtUser.isDemander() && jwtUser.getMaxtokennum() != 0 && authenticationRequest.getType() == 2) {
+        if (jwtUser.isDemander() && authenticationRequest.getType() == 2) {
 
-            int count = accessTokenService.countByUserIdAndType(jwtUser.getId(), authenticationRequest.getType());
+            // 过期时间
+            expire = expiration;
 
-            if (count >= jwtUser.getMaxtokennum()) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("脚本数量已达到最大限制");
+            if (jwtUser.getMaxtokennum() != 0) {
+
+                int count = accessTokenService.countByUserIdAndType(jwtUser.getId(), authenticationRequest.getType());
+
+                if (count >= jwtUser.getMaxtokennum()) {
+                    return ResponseEntity.status(HttpStatus.FORBIDDEN).body("脚本数量已达到最大限制");
+                }
+
+                // 剩余数量
+                leftNum = jwtUser.getMaxtokennum() - count - 1;
+
+            } else {
+                leftNum = 999;
             }
         }
 
         final String token = tokenUtil.generateToken(jwtUser.getUsername(), jwtUser.getId(), authenticationRequest.getType());
 
         // Return the token
-        return ResponseEntity.ok(new JwtAuthenticationResponse(token));
+        return ResponseEntity.ok(new JwtAuthenticationResponse(token, leftNum, expire));
     }
 
     @RequestMapping(value = "${jwt.route.authentication.refresh}", method = RequestMethod.GET)
@@ -77,13 +95,30 @@ public class AuthenticationRestController {
         final String token = authToken.substring(7);
         AccessToken accessToken = accessTokenService.findOne(token);
 
+        Integer leftNum = null;
+        Integer expire = null;
+
         // token找到，则删除原来的token，并且生成新的token
         if (Objects.nonNull(accessToken)) {
 
             tokenUtil.deleteToken(accessToken.getToken());
 
             String newToken = tokenUtil.generateToken(accessToken.getUsername(), accessToken.getUserId(), accessToken.getType());
-            return ResponseEntity.ok(new JwtAuthenticationResponse(newToken));
+
+            if (accessToken.getType() == 2) {
+                int count = accessTokenService.countByUserIdAndType(accessToken.getUserId(), accessToken.getType());
+                final JwtUser jwtUser = (JwtUser) userDetailsService.loadUserByUsername(accessToken.getUsername());
+
+                // 剩余数量
+                if(jwtUser.getMaxtokennum() == 0) {
+                    leftNum = 999;
+                } else {
+                    leftNum = jwtUser.getMaxtokennum() - count - 1;
+                }
+                expire = expiration;
+            }
+
+            return ResponseEntity.ok(new JwtAuthenticationResponse(newToken, leftNum, expire));
 
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("token未找到");
