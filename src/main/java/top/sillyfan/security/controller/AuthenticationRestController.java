@@ -90,6 +90,11 @@ public class AuthenticationRestController {
         }
     }
 
+    @GetMapping("/check")
+    public ResponseEntity<?> check() {
+        return ResponseEntity.ok("success");
+    }
+
     @ExceptionHandler({AuthenticationException.class})
     public ResponseEntity<String> handleAuthenticationException(AuthenticationException e) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
