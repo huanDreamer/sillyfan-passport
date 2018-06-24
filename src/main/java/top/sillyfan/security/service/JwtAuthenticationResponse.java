@@ -16,21 +16,29 @@ public class JwtAuthenticationResponse implements Serializable {
     // 剩余可用脚本数量
     private final Integer leftTokenNum;
 
+    // 线程数
+    private final Integer maxThreadNum;
+
     // 过期时间，单位秒
     private final Integer expire;
 
-    public JwtAuthenticationResponse(String token, Integer leftTokenNum, Integer expire) {
+    public JwtAuthenticationResponse(String token, Integer leftTokenNum, Integer maxThreadNum, Integer expire) {
         this.token = token;
         this.leftTokenNum = leftTokenNum;
+        this.maxThreadNum = maxThreadNum;
         this.expire = expire;
     }
 
     public String getToken() {
-        return this.token;
+        return token;
     }
 
     public Integer getLeftTokenNum() {
         return leftTokenNum;
+    }
+
+    public Integer getMaxThreadNum() {
+        return maxThreadNum;
     }
 
     public Integer getExpire() {
