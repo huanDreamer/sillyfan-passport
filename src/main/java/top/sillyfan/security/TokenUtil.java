@@ -24,7 +24,7 @@ public class TokenUtil {
     @Value("${jwt.long-expiration}")
     private Integer longExpiration;
 
-    public AccessToken getUsernameFromToken(String authToken, Integer type) {
+    public AccessToken getUsernameFromToken(String authToken) {
         AccessToken accessToken = accessTokenService.findOne(authToken);
 
         // 如果token未找到 / token过期
@@ -33,8 +33,8 @@ public class TokenUtil {
         }
 
         // token 未失效，则延长时效
-        accessToken.setExpire(DateTime.now().plusSeconds(getExpirationValue(type)));
-        
+        accessToken.setExpire(DateTime.now().plusSeconds(getExpirationValue(accessToken.getType())));
+
         accessTokenService.update(accessToken);
 
         return accessToken;

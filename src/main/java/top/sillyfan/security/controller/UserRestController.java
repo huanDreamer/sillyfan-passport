@@ -29,7 +29,7 @@ public class UserRestController {
     @RequestMapping(value = "user", method = RequestMethod.GET)
     public JwtUser getAuthenticatedUser(HttpServletRequest request) {
         String token = request.getHeader(tokenHeader).substring(7);
-        AccessToken accessToken = tokenUtil.getUsernameFromToken(token, 2);
+        AccessToken accessToken = tokenUtil.getUsernameFromToken(token);
         JwtUser user = (JwtUser) userDetailsService.loadUserByUsername(accessToken.getUsername());
         return user;
     }

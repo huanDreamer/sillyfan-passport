@@ -47,7 +47,7 @@ public class AuthorizationTokenFilter extends OncePerRequestFilter {
         if (requestHeader != null && requestHeader.startsWith("Bearer ")) {
             authToken = requestHeader.substring(7);
             try {
-                accessToken = tokenUtil.getUsernameFromToken(authToken, type);
+                accessToken = tokenUtil.getUsernameFromToken(authToken);
 
                 // 找到token，并且未到期
                 if (Objects.nonNull(accessToken) && !tokenUtil.tokenExpire(accessToken)) {

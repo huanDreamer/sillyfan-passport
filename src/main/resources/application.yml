@@ -9,7 +9,7 @@ spring:
 #      database: auxiliary
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://111.231.146.172:3306/auxiliary?useUnicode=true&amp;characterEncoding=UTF-8&useSSL=false
+    url: jdbc:mysql://47.75.49.122:3306/auxiliary?useUnicode=true&amp;characterEncoding=UTF-8&useSSL=false
     username: root
     password: djuey2eh8u
 

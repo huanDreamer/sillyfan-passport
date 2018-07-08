@@ -45,6 +45,7 @@ public class JwtUserDetailsService implements UserDetailsService {
                 .taskStatus(user.getTaskStatus())
                 .online(user.getOnline())
                 .lastPasswordResetDate(user.getLastPasswordResetDate())
+                .expireDate(user.getExpireDate())
                 .build();
         }
     }
